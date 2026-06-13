@@ -287,6 +287,8 @@ When you hit a syntax difference, add a macro to `cross_db.sql` rather than addi
 
 **Token expiry during sync**: `sync_table()` fetches a fresh bearer token per table rather than reusing one across all syncs. Azure access tokens expire after ~60 minutes; without this, long multi-table syncs produce 401 errors.
 
+**Deletion vectors**: delta-rs does not yet support deletion vectors. Databricks enables deletion vectors by default from DBR 14 onwards. If a table has deletion vectors enabled, local reads via `sync_table()` or `delta_scan()` may return rows that have been soft-deleted, because the deletion vector files are not applied. For development and exploration this is usually acceptable, but avoid relying on local results for correctness checks on tables where rows are frequently deleted or updated.
+
 **dbt shell commands in notebooks**: use the absolute path when running `!dbt ...` in a notebook cell. Each `!` runs in a fresh subshell, so relative paths fail:
 ```bash
 !cd /workspaces/your-project/local-devex/dbt && dbt run --target local
