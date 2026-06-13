@@ -1,0 +1,54 @@
+{
+  "name": "Local Lakehouse DevEx",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "forwardPorts": [8888, 4213],
+  "portsAttributes": {
+    "8888": {
+      "label": "JupyterLab",
+      "onAutoForward": "notify"
+    },
+    "4213": {
+      "label": "DuckDB UI",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "containerEnv": {
+    "AZURE_SUBSCRIPTION_ID": "<your-azure-subscription-id>",
+    "ADLS_ACCOUNT": "<your-adls-account>",
+    "DATABRICKS_HOST": "<your-databricks-host>",
+    "DATABRICKS_HTTP_PATH": "<your-sql-warehouse-http-path>",
+    "DATABRICKS_CATALOG": "<your-unity-catalog>",
+    "PYTHONPATH": "/workspaces/your-project/local-devex",
+    "DBT_PROFILES_DIR": "/workspaces/your-project/local-devex/dbt",
+    "LAKEHOUSE_DB_PATH": "/workspaces/your-project/local-devex/.cache/lakehouse_dev.duckdb",
+    "LAKEHOUSE_CACHE": "/workspaces/your-project/local-devex/.cache"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "ms-toolsai.datawrangler",
+        "innoverio.vscode-dbt-power-user",
+        "redhat.vscode-yaml",
+        "github.vscode-github-actions",
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "[python]": {
+          "editor.defaultFormatter": "ms-python.python"
+        },
+        "jupyter.notebookFileRoot": "${workspaceFolder}/local-devex/notebooks"
+      }
+    }
+  },
+  "postCreateCommand": "echo '--- versions ---' && python --version && databricks --version && az --version | head -1 && claude --version && dbt --version && echo '--- run: az login to authenticate ---' && nbstripout --install && echo '--- nbstripout installed as git filter ---'",
+  "runArgs": ["--memory=12g", "--memory-swap=12g"]
+}

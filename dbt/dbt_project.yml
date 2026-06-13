@@ -1,0 +1,28 @@
+name: my_lakehouse
+version: '1.0.0'
+config-version: 2
+
+profile: my_lakehouse
+
+model-paths: ["models"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+
+vars:
+  # Local Parquet cache directory -- matches lakekit/sync.py CACHE_DIR default
+  cache_dir: "/workspaces/your-project/local-devex/.cache"
+
+models:
+  my_lakehouse:
+    staging:
+      +materialized: view
+      +schema: bronze
+    silver:
+      +materialized: table
+    gold:
+      +materialized: table

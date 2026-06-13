@@ -1,0 +1,20 @@
+version: 2
+
+# Sources are only resolved on the prod target (dbt-databricks -> Unity Catalog).
+# On the local target, staging models read directly from the Parquet cache via
+# read_parquet() -- these source definitions are not used locally.
+
+sources:
+  - name: bronze_source
+    database: "{{ env_var('DATABRICKS_CATALOG') }}"
+    schema: bronze
+
+    tables:
+      - name: raw_events
+        description: Raw event records from your source system
+
+      - name: event_tracking
+        description: Per-event processing state machine
+
+      - name: event_metadata
+        description: Additional metadata attached to each event

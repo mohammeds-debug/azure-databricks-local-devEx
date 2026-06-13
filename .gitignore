@@ -1,0 +1,22 @@
+# Local Parquet cache -- large data files, not source code
+.cache/
+
+# dbt build artifacts
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+dbt/.user.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb.bak
+
+# Credentials -- never commit these
+.env
+*.token
